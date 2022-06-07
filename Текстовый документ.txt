@@ -1,0 +1,74 @@
+using System.Windows.Threading;
+
+namespace WpfApp4
+{
+    /// <summary>
+    /// Логика взаимодействия для MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        DispatcherTimer timer = new DispatcherTimer();
+        public MainWindow()
+        {
+            InitializeComponent();
+            timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Tick += timer_Tick;
+        }
+        int intrerv = 10;
+
+        void timer_Tick(object sender, EventArgs e)
+        {
+            intrerv--;
+            if (intrerv == 0)
+            {
+                timer.Stop();
+                intrerv = 10;
+                textBoxCapthaNeGen.Visibility = Visibility.Hidden;
+            }
+            buttonVhodAdmin.Content = "Блококировка на " + intrerv.ToString() + " Секунд";
+
+        }
+
+        private void buttonVhodAdmin_Click(object sender, RoutedEventArgs e)
+        {
+            string login = "o@outlook.com";
+            string pass = "2L6KZG";
+
+            if (textBoxLogin.Text == login)
+            {
+                if (textBoxPassword.Password == pass)
+                {
+                    if (textBoxCapthaGen.Text == textBoxCapthaNeGen.Text)
+                    {
+                        Window1 Win1 = new Window1();
+                        Win1.Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Капча неверная");
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("Пароль неверный");
+                }
+            }
+            else
+            {
+                MessageBox.Show("логин неверный");
+            }
+        }
+
+
+        private void buttonCaptha_Click(object sender, RoutedEventArgs e)
+        {
+            Random rd = new Random();
+            int cap = rd.Next(100, 999);
+            textBoxCapthaGen.Text = Convert.ToString(cap);
+
+            timer.Start();
+            textBoxCapthaNeGen.Visibility = Visibility.Visible;
+        }
+    }
+}
